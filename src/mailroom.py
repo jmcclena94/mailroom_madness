@@ -1,61 +1,69 @@
 # coding=utf-8
-""" Create form email or report from donor list """
+"""Create form email or report from donor list."""
 import io
 
 
 def initial_prompt():
+    """Prompt user for action selection."""
     prompt = input('Please select from the following options: '
-                   '\n\n  create report \n  send thank you \n  quit \n\n')
-    if prompt == 'quit':
+                   '\n\n  Create Report \n'
+                   '  Send Thank You \n  Quit \n\n').lower()
+    if prompt == 'quit' or prompt == 'q':
         quit()
-    elif prompt == 'create report':
+    elif prompt == 'create report' or prompt == 'create':
         create_report()
-    elif prompt == 'send thank you':
-        third_prompt()
+    elif prompt == 'send thank you' or prompt == 'send':
+        donor_list_prompt()
     else:
         print('Not a valid option.\n')
         initial_prompt()
 
 
-def second_prompt():
-    prompt = input('\nquit or start again?\n')
-    if prompt == 'quit':
+def quit_prompt():
+    """Prompt user for quit program or reinitialize program imput."""
+    prompt = input('\nQuit or start again?\n').lower()
+    if prompt == 'quit' or prompt == 'q':
         quit()
-    elif prompt == 'start again':
+    elif prompt == 'start again' or prompt == 'start':
         initial_prompt()
     else:
         print('That is not a valid option.\n')
-        second_prompt()
+        quit_prompt()
 
 
-def third_prompt():
+def donor_list_prompt():
+    """Prompt user for a name or to view donor list."""
     prompt = input('\nType donor name for a specific donor or "list" to see '
                    'a list of all donors.\n')
-    if prompt == 'list':
+    if prompt == 'list' or prompt == 'List':
         name_list()
     else:
-        send_thanks(prompt)
+        update_donations(prompt)
 
 
 def name_list():
+    """Return and print a list of donors."""
     donors = donor_list(read_donors(), 'list')
     print('\nList of donors:\n')
     for name in donors:
         print(name[0])
-    third_prompt()
+    donor_list_prompt()
 
 
 def create_report():
+    """Return and print ordered list of donor stats."""
     donors = donor_list(read_donors(), 'list')
     sorted_donors = sorted_list(donors)
     print('Your Donor Report:\n')
     for donor in sorted_donors:
-        line = '{0} has donated a total of ${1} in {2} donations at ${3} per donation.'.format(donor[0], donor[1], donor[2], donor[3])
+        line = ('{0} has donated a total of ${1} in {2} donations at ${3} per '
+                'donation.'.format(donor[0], donor[1], donor[2], donor[3]))
         print(line)
-    second_prompt()
+    quit_prompt()
 
 
 def donation_prompt(person):
+    """Prompt and return an integer from user."""
     value = input('How much did {0} donate?\n'.format(person))
     try:
         int(value)
@@ -65,7 +73,8 @@ def donation_prompt(person):
         donation_prompt(person)
 
 
-def send_thanks(person):
+def update_donations(person):
+    """Update donor values and save list execute email reply."""
     donors = donor_list(read_donors(), 'dictionary')
     value = int(donation_prompt(person))
     if person in list(donors.keys()):
@@ -76,41 +85,45 @@ def send_thanks(person):
         donors.setdefault(person, [value, 1, value])
     val = donors[person]
     write_file(generate_text(donors))
-    generate_reply(person, val[0])
+    generate_email(person, val[0])
 
 
 def generate_text(donors):
+    """Return list of donors as a block of strings."""
     people = list(donors.keys())
     text_string = ''
-    generate_text.count = 0               # This is for testing
     for donor in people:
-        generate_text.count += 1          # This is for testing
         values = donors[donor]
-        temp_string = '{0}:{1} {2} {3}\n'.format(donor, values[0], values[1], values[2])
+        temp_string = ('{0}:{1} {2} '
+                       '{3}\n'.format(donor, values[0], values[1], values[2]))
         text_string = text_string + temp_string
     return text_string
 
 
 def write_file(text):
+    """Write donor list text to text file."""
     newfile = io.open('src/donor_list.txt', 'w', encoding='utf-8')
     newfile.write(text)
     newfile.close()
 
 
-def generate_reply(person, donations):
-    email_text = 'Dear {0}, thank you for your donation of ${1}.'.format(person, donations)
-    print(email_text)
-    initial_prompt()
+def generate_email(person, donations):
+    """Print email response for selected donor."""
+    print('\nDear {0},\n Thank you for your donation of ${1}.  '
+          'We appreciate your chairty.'.format(person, donations))
+    quit_prompt()
 
 
 def calculation(donations, value):
+    """Return new donation values."""
     donations[0] = int(donations[0]) + value
     donations[1] = int(donations[1]) + 1
-    donations[2] = int(donations[0])/int(donations[1])
+    donations[2] = int(donations[0]) / int(donations[1])
     return donations
 
 
 def read_donors():
+    """Return donor file text."""
     openfile = io.open('src/donor_list.txt', encoding='utf-8')
     readfile = openfile.readlines()
     openfile.close()
@@ -118,6 +131,7 @@ def read_donors():
 
 
 def donor_list(readfile, choice):
+    """Return list or dictionary based on choice type."""
     if choice == 'list':
         donor_list = []
     else:
@@ -127,14 +141,15 @@ def donor_list(readfile, choice):
         name = temp[0]
         numbers = temp[1].split()
         if choice == 'list':
-            donor_list.append((name, *numbers))
+            donor_list.append(tuple([name] + numbers))
         else:
             donor_list.setdefault(name, numbers)
     return donor_list
 
 
 def sorted_list(lst):
-    sorted_list = sorted(lst, key=lambda donor: int(donor[1]))
+    """Return sorted list of donors highest to lowest of total donation."""
+    sorted_list = sorted(lst, key=lambda donor: int(donor[1]), reverse=True)
     return sorted_list
 
 
