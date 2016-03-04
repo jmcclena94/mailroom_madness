@@ -1,0 +1,6 @@
+Nadia Bahrami:10000 5 2000
+Bruce Wayne:20000010 2 10000005.0
+Cris Ewing:1000 1 1000
+John McLain:55 11 5
+Joe McClenahan:5000 2 2500
+John Smith:100 1 100
