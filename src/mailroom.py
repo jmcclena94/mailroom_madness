@@ -5,7 +5,7 @@ import io
 
 def initial_prompt():
     prompt = input('Please select from the following options: '
-    '\n\n  create report \n  send thank you \n  quit \n\n')
+                   '\n\n  create report \n  send thank you \n  quit \n\n')
     if prompt == 'quit':
         quit()
     elif prompt == 'create report':
@@ -73,14 +73,40 @@ def send_thanks(person):
         new_donations = calculation(donations, value)
         donors.setdefault(person, new_donations)
     else:
-        donors.setdefault(person, []).append(value, 1, value)
-    generate_reply(person, donors(person))
+        donors.setdefault(person, [value, 1, value])
+    val = donors[person]
+    write_file(generate_text(donors))
+    generate_reply(person, val[0])
+
+
+def generate_text(donors):
+    people = list(donors.keys())
+    text_string = ''
+    generate_text.count = 0               # This is for testing
+    for donor in people:
+        generate_text.count += 1          # This is for testing
+        values = donors[donor]
+        temp_string = '{0}:{1} {2} {3}\n'.format(donor, values[0], values[1], values[2])
+        text_string = text_string + temp_string
+    return text_string
+
+
+def write_file(text):
+    newfile = io.open('src/donor_list.txt', 'w', encoding='utf-8')
+    newfile.write(text)
+    newfile.close()
+
+
+def generate_reply(person, donations):
+    email_text = 'Dear {0}, thank you for your donation of ${1}.'.format(person, donations)
+    print(email_text)
+    initial_prompt()
 
 
 def calculation(donations, value):
-    donations[0] += value
-    donations[1] += 1
-    donations[2] = donations[0]/donations[1]
+    donations[0] = int(donations[0]) + value
+    donations[1] = int(donations[1]) + 1
+    donations[2] = int(donations[0])/int(donations[1])
     return donations
 
 

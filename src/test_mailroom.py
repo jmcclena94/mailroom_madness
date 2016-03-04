@@ -45,6 +45,16 @@ CALC_TABLE = [
 ]
 
 
+TEXT_TABLE = [
+    ({'Nadia Bahrami': ['10000', '5', '2000'],
+     'John McLain': ['55', '11', '5'],
+        'Joe McClenahan': ['5000', '2', '2500'],
+        'Bruce Wayne': ['20000000', '1', '20000000'],
+        'Cris Ewing': ['1000', '1', '1000']},
+        5),
+]
+
+
 @pytest.mark.parametrize('lst, choice, result', DIC_TABLE)
 def test_donor_list(lst, choice, result):
     from mailroom import donor_list
@@ -61,3 +71,10 @@ def test_sorted_list(lst, result):
 def test_calculation(donations, value, result):
     from mailroom import calculation
     assert calculation(donations, value) == result
+
+
+@pytest.mark.parametrize('dict, result', TEXT_TABLE)
+def test_generate_text(dict, result):
+    from mailroom import generate_text
+    generate_text(dict)
+    assert generate_text.count == result
