@@ -34,9 +34,11 @@ def quit_prompt():
 def donor_list_prompt():
     """Prompt user for a name or to view donor list."""
     prompt = input('\nType donor name for a specific donor or "list" to see '
-                   'a list of all donors.\n')
+                   'a list of all donors. Type "quit" to quit.\n')
     if prompt == 'list' or prompt == 'List':
         name_list()
+    elif prompt == 'quit' or prompt == 'q':
+        quit()
     else:
         update_donations(prompt)
 
@@ -64,13 +66,16 @@ def create_report():
 
 def donation_prompt(person):
     """Prompt and return an integer from user."""
-    value = input('How much did {0} donate?\n'.format(person))
-    try:
-        int(value)
-        return value
-    except ValueError:
-        print('Not a number')
-        donation_prompt(person)
+    value = input('How much did {0} donate?\nType q to quit\n'.format(person))
+    if value == 'quit' or value == 'q':
+        quit()
+    else:
+        try:
+            int(value)
+            return value
+        except ValueError:
+            print('Not a number')
+            donation_prompt(person)
 
 
 def update_donations(person):
