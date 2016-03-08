@@ -41,7 +41,7 @@ def donor_list_prompt():
     if prompt == 'list' or prompt == 'List':
         name_list()
     elif prompt == 'quit' or prompt == 'q':
-        quit()
+        initial_prompt()
     else:
         update_donations(prompt)
 
@@ -71,7 +71,7 @@ def donation_prompt(person):
     """Prompt and return an integer from user."""
     value = input('How much did {0} donate?\nType q to quit\n'.format(person))
     if value == 'quit' or value == 'q':
-        quit()
+        initial_prompt()
     else:
         try:
             int(value)
