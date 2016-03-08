@@ -41,7 +41,7 @@ def donor_list_prompt():
     if prompt == 'list' or prompt == 'List':
         name_list()
     elif prompt == 'quit' or prompt == 'q':
-        quit()
+        initial_prompt()
     else:
         update_donations(prompt)
 
@@ -71,7 +71,7 @@ def donation_prompt(person):
     """Prompt and return an integer from user."""
     value = input('How much did {0} donate?\nType q to quit\n'.format(person))
     if value == 'quit' or value == 'q':
-        quit()
+        initial_prompt()
     else:
         try:
             int(value)
@@ -99,10 +99,10 @@ def update_donations(person):
 def generate_text(donors):
     """Return list of donors as a block of strings."""
     people = list(donors.keys())
-    text_string = ''
+    text_string = u''
     for donor in people:
         values = donors[donor]
-        temp_string = ('{0}:{1} {2} '
+        temp_string = (u'{0}:{1} {2} '
                        '{3}\n'.format(donor, values[0], values[1], values[2]))
         text_string = text_string + temp_string
     return text_string
