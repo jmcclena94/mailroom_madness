@@ -2,6 +2,9 @@
 """Create form email or report from donor list."""
 import io
 
+if hasattr(__builtins__, 'raw_input'): # Found on stackoverflow
+      input=raw_input  # http://stackoverflow.com/questions/4960208/python-2-7-getting-user-input-and-manipulating-as-string-without-quotations
+
 
 def initial_prompt():
     """Prompt user for action selection."""
