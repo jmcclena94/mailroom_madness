@@ -99,10 +99,10 @@ def update_donations(person):
 def generate_text(donors):
     """Return list of donors as a block of strings."""
     people = list(donors.keys())
-    text_string = ''
+    text_string = u''
     for donor in people:
         values = donors[donor]
-        temp_string = ('{0}:{1} {2} '
+        temp_string = (u'{0}:{1} {2} '
                        '{3}\n'.format(donor, values[0], values[1], values[2]))
         text_string = text_string + temp_string
     return text_string
