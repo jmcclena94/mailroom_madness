@@ -2,8 +2,11 @@
 """Create form email or report from donor list."""
 import io
 
-if hasattr(__builtins__, 'raw_input'): # Found on stackoverflow
-      input=raw_input  # http://stackoverflow.com/questions/4960208/python-2-7-getting-user-input-and-manipulating-as-string-without-quotations
+
+if hasattr(__builtins__, 'raw_input'):  # Found on stackoverflow
+    input = raw_input  # http://stackoverflow.com/questions/4960208/python-
+    # 2-7-getting-user-input-and-manipulating-as-string-without-quotations
+    #
 
 
 def initial_prompt():
@@ -11,11 +14,11 @@ def initial_prompt():
     prompt = input('Please select from the following options: '
                    '\n\n  Create Report \n'
                    '  Send Thank You \n  Quit \n\n').lower()
-    if prompt == 'quit' or prompt == 'q':
+    if prompt.lower() == 'quit' or prompt.lower() == 'q':
         quit()
-    elif prompt == 'create report' or prompt == 'create':
+    elif prompt.lower() == 'create report' or prompt.lower() == 'create':
         create_report()
-    elif prompt == 'send thank you' or prompt == 'send':
+    elif prompt.lower() == 'send thank you' or prompt.lower() == 'send':
         donor_list_prompt()
     else:
         print('Not a valid option.\n')
@@ -25,9 +28,9 @@ def initial_prompt():
 def quit_prompt():
     """Prompt user for quit program or reinitialize program imput."""
     prompt = input('\nQuit or start again?\n').lower()
-    if prompt == 'quit' or prompt == 'q':
+    if prompt.lower() == 'quit' or prompt.lower() == 'q':
         quit()
-    elif prompt == 'start again' or prompt == 'start':
+    elif prompt.lower() == 'start again' or prompt.lower() == 'start':
         initial_prompt()
     else:
         print('That is not a valid option.\n')
@@ -38,9 +41,9 @@ def donor_list_prompt():
     """Prompt user for a name or to view donor list."""
     prompt = input('\nType donor name for a specific donor or "list" to see '
                    'a list of all donors. Type "quit" to quit.\n')
-    if prompt == 'list' or prompt == 'List':
+    if prompt.lower() == 'list':
         name_list()
-    elif prompt == 'quit' or prompt == 'q':
+    elif prompt.lower() == 'quit' or prompt.lower() == 'q':
         initial_prompt()
     else:
         update_donations(prompt)
@@ -70,7 +73,7 @@ def create_report():
 def donation_prompt(person):
     """Prompt and return an integer from user."""
     value = input('How much did {0} donate?\nType q to quit\n'.format(person))
-    if value == 'quit' or value == 'q':
+    if value.lower() == 'quit' or value.lower() == 'q':
         initial_prompt()
     else:
         try:
@@ -140,7 +143,7 @@ def read_donors():
 
 def donor_list(readfile, choice):
     """Return list or dictionary based on choice type."""
-    if choice == 'list':
+    if choice.lower() == 'list':
         donor_list = []
     else:
         donor_list = {}
